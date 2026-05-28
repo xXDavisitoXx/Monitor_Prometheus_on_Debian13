@@ -7,6 +7,12 @@ Install the prerequisite packages:
 sudo apt-get install -y apt-transport-https wget gnupg, curl
 ```
 ## Prometheus 
+Create own user:
+
+```bash
+sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
+```
+sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
 
 Download packet:
 
@@ -19,6 +25,27 @@ Descompress tar:
 tar -xvf prometheus-3.11.3.linux-amd64.tar.gz
 cd prometheus-3.11.3.linux-amd64
 ```
+
+Copy binaries:
+```bash
+sudo cp prometheus /usr/local/bin/
+sudo cp promtool /usr/local/bin/
+```
+
+Create directories:
+```bash
+sudo mkdir -p /etc/prometheus
+sudo mkdir -p /var/lib/prometheus
+sudo cp -r consoles /etc/prometheus
+sudo cp -r console_libraries /etc/prometheus
+sudo cp prometheus.yml /etc/prometheus/
+```
+
+Add permissions:
+```bash
+sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+```
+
 ## Grafana 
 Import the GPG key:
 
