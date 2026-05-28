@@ -45,6 +45,59 @@ Add permissions:
 sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
 ```
 
+Create service:
+
+```bash
+sudo nano /etc/systemd/system/prometheus.service
+```
+```bash
+[Unit]
+Description=Prometheus Monitoring
+Documentation=https://prometheus.io/docs/introduction/overview/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus \
+  --web.console.templates=/etc/prometheus/consoles \
+  --web.console.libraries=/etc/prometheus/console_libraries
+
+Restart=on-failure
+RestartSec=5s
+
+# Seguridad
+NoNewPrivileges=true
+PrivateTmp=true
+
+ProtectSystem=strict
+ProtectHome=true
+
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+RestrictNamespaces=true
+
+# Permisos necesarios
+ReadWritePaths=/var/lib/prometheus
+ReadOnlyPaths=/etc/prometheus
+
+# Límites
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## Grafana 
 Import the GPG key:
 
