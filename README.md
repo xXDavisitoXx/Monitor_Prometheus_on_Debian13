@@ -105,6 +105,11 @@ sudo systemctl start prometheus
 sudo systemctl enable --now prometheus
 sudo systemctl status prometheus
 ```
+Try web acces:
+http://YOUR-IP:9090
+
+---
+
 ## Grafana 
 Import the GPG key:
 
