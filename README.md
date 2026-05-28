@@ -4,9 +4,22 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt-get install -y apt-transport-https wget gnupg
+sudo apt-get install -y apt-transport-https wget gnupg, curl
 ```
+## Prometheus 
 
+Download packet:
+
+```bash
+curl -LO https://github.com/prometheus/prometheus/releases/download/v3.11.3/prometheus-3.11.3.linux-amd64.tar.gz
+```
+Descompress tar:
+
+```bash
+tar -xvf prometheus-3.11.3.linux-amd64.tar.gz
+cd prometheus-3.11.3.linux-amd64
+```
+## Grafana 
 Import the GPG key:
 
 ```bash
@@ -31,3 +44,24 @@ Install Grafana:
 ```bash
 apt install grafana
 ```
+
+Start and enable service:
+
+```bash
+sudo systemctl start grafana-server
+sudo systemctl enable grafana-server
+```
+
+Check status service:
+
+```bash
+sudo systemctl start grafana-server
+sudo systemctl enable grafana-server
+sudo systemctl status grafana-server
+```
+
+Try web acces:
+
+http://YOUR-IP:3000/
+
+
