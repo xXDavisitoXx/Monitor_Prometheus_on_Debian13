@@ -97,7 +97,14 @@ LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
 ```
+Enable and Start service:
 
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start prometheus
+sudo systemctl enable --now prometheus
+sudo systemctl status prometheus
+```
 ## Grafana 
 Import the GPG key:
 
