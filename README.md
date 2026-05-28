@@ -198,6 +198,11 @@ RemoveIPC=true
 
 SystemCallArchitectures=native
 
+# ===== CONTROL DE RED =====
+IPAddressDeny=any
+IPAddressAllow=127.0.0.1
+IPAddressAllow=::1
+
 # Solo permitir familias de sockets necesarias
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 
