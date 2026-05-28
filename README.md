@@ -113,12 +113,60 @@ http://YOUR-IP:9090
 ---
 
 ## Node-Exporter
+Create user:
+
+```bash
+sudo useradd --system --no-create-home --shell /usr/sbin/nologin node_exporter
+```
+
+Download and install:
 ```bash
 wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
 tar xvfz node_exporter-1.10.2.linux-amd64.tar.gz
 cd node_exporter-1.10.2.linux-amd64
 ./node_exporter
 ```
+
+Copy binaries:
+```bash
+sudo cp node_exporter-1.10.2.linux-amd64/node_exporter /usr/local/bin/
+sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+```
+
+Create service: 
+```bash
+sudo nano /etc/systemd/system/node_exporter.service
+```
+```bash
+[Unit]
+Description=Prometheus Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Start and enable service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start node_exporter
+sudo systemctl enable --now node_exporter
+sudo systemctl status node_exporter
+```
+
+Test metrics:
+```bash
+curl http://localhost:9100/metrics
+```
+
+
 
 ---
 ## Grafana 
