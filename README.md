@@ -152,6 +152,75 @@ ExecStart=/usr/local/bin/node_exporter
 [Install]
 WantedBy=multi-user.target
 ```
+Hardenizado:
+```bash
+[Unit]
+Description=Prometheus Node Exporter
+Documentation=https://github.com/prometheus/node_exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+
+User=node_exporter
+Group=node_exporter
+
+ExecStart=/usr/local/bin/node_exporter \
+  --web.listen-address=:9100
+
+Restart=on-failure
+RestartSec=5s
+
+# ===== Seguridad =====
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+
+ProtectSystem=strict
+ProtectHome=true
+
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectClock=true
+ProtectHostname=true
+
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+RestrictRealtime=true
+RestrictNamespaces=true
+RestrictSUIDSGID=true
+
+RemoveIPC=true
+
+SystemCallArchitectures=native
+
+# Solo permitir familias de sockets necesarias
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+# Node Exporter necesita leer /proc y /sys
+ProcSubset=pid
+
+# Permitir acceso de solo lectura al sistema
+ReadOnlyPaths=/
+
+# Permitir acceso explícito a métricas kernel
+ReadWritePaths=/run
+
+# Capabilities
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# Limitar recursos
+LimitNOFILE=65536
+TasksMax=1024
+
+[Install]
+WantedBy=multi-user.target
+```
 
 Start and enable service:
 ```bash
