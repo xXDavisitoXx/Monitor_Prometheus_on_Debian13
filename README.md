@@ -62,6 +62,8 @@ Type=simple
 User=prometheus
 Group=prometheus
 
+ExecStartPre=/usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
+
 ExecStart=/usr/local/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
   --storage.tsdb.path=/var/lib/prometheus \
