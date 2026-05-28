@@ -12,7 +12,6 @@ Create own user:
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 ```
-sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
 
 Download packet:
 
