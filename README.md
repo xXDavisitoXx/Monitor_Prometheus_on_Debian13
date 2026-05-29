@@ -28,7 +28,7 @@ Descompress tar:
 
 ```bash
 tar -xvf prometheus-3.11.3.linux-amd64.tar.gz
-cd prometheus-3.11.3.linux-amd64
+cd prometheus-3.12.0.linux-amd64
 ```
 
 Copy binaries:
