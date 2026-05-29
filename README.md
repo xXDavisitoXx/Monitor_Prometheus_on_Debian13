@@ -52,7 +52,7 @@ Copy config file:
 ```bash
 sudo cp prometheus.yml /etc/prometheus/
 ```
-
+Restrict permissions to prometheus user:
 ```bash
 sudo chown -R prometheus:prometheus /mnt/prometheus-data/prometheus
 sudo chmod -R 750 /mnt/prometheus-data/prometheus
