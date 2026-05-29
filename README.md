@@ -33,7 +33,7 @@ sudo cp promtool /usr/local/bin/
 
 Create directories:
 ```bash
-sudo mkdir -p /etc/prometheus
+sudo mkdir /etc/prometheus
 sudo mkdir -p /mnt/prometheus-db/prometheus
 sudo cp -r consoles /etc/prometheus
 sudo cp -r console_libraries /etc/prometheus
