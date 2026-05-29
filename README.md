@@ -44,6 +44,11 @@ sudo mkdir -p /mnt/prometheus-db/prometheus
 sudo cp prometheus.yml /etc/prometheus/
 ```
 
+Copy config file:
+```bash
+sudo cp prometheus.yml /etc/prometheus/
+```
+
 Add permissions:
 ```bash
 sudo chown -R prometheus:prometheus /etc/prometheus /mnt/prometheus-data/prometheus
