@@ -15,8 +15,14 @@ sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 
 Download packet:
 
+last version auto command:
 ```bash
-curl -LO https://github.com/prometheus/prometheus/releases/download/v3.11.3/prometheus-3.11.3.linux-amd64.tar.gz
+curl -LO $(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep "browser_download_url.*linux-amd64.tar.gz" | cut -d '"' -f 4)
+```
+
+static version guide:
+```bash
+curl -LO https://github.com/prometheus/prometheus/releases/download/v3.12.0/prometheus-3.12.0.linux-amd64.tar.gz
 ```
 Descompress tar:
 
