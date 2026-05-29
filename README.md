@@ -53,10 +53,12 @@ Copy config file:
 sudo cp prometheus.yml /etc/prometheus/
 ```
 
-Add permissions:
+Add permissions to prometheus user:
 ```bash
 sudo chown -R root:prometheus /etc/prometheus
+sudo chmod -R 750 /etc/prometheus
 sudo chown -R prometheus:prometheus /mnt/prometheus-data/prometheus
+sudo chmod -R 750 /mnt/prometheus-data/prometheus
 ```
 
 Create service:
