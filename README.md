@@ -15,9 +15,14 @@ sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 
 Download packet:
 
-last version auto command:
+
+Last version auto command:
 ```bash
-curl -LO $(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep "browser_download_url.*linux-amd64.tar.gz" | cut -d '"' -f 4)
+curl -LO $( \
+  curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest \
+  | grep "browser_download_url.*linux-amd64.tar.gz" \
+  | cut -d '"' -f 4 \
+)
 ```
 
 static version guide:
