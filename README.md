@@ -41,8 +41,6 @@ Create directories:
 ```bash
 sudo mkdir /etc/prometheus
 sudo mkdir -p /mnt/prometheus-db/prometheus
-sudo cp -r consoles /etc/prometheus
-sudo cp -r console_libraries /etc/prometheus
 sudo cp prometheus.yml /etc/prometheus/
 ```
 
