@@ -45,7 +45,7 @@ sudo cp promtool /usr/local/bin/
 Create directories:
 ```bash
 sudo mkdir /etc/prometheus
-sudo mkdir -p /mnt/prometheus-db/prometheus
+sudo mkdir -p /mnt/prometheus-data/prometheus
 ```
 
 Copy config file:
