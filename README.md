@@ -4,7 +4,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install apt-transport-https wget gnupg curl
+sudo apt install curl
 ```
 ## Prometheus 
 Create own user:
