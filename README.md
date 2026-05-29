@@ -4,7 +4,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt-get install -y apt-transport-https wget gnupg, curl
+sudo apt install apt-transport-https wget gnupg curl
 ```
 ## Prometheus 
 Create own user:
@@ -34,7 +34,7 @@ sudo cp promtool /usr/local/bin/
 Create directories:
 ```bash
 sudo mkdir -p /etc/prometheus
-sudo mkdir -p /var/lib/prometheus
+sudo mkdir -p /mnt/prometheus-db/prometheus
 sudo cp -r consoles /etc/prometheus
 sudo cp -r console_libraries /etc/prometheus
 sudo cp prometheus.yml /etc/prometheus/
