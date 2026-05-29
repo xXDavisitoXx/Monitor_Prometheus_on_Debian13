@@ -52,7 +52,7 @@ sudo nano /etc/systemd/system/prometheus.service
 ```
 ```bash
 [Unit]
-Description=Prometheus Monitoring
+Description=Prometheus Monitor Server
 Documentation=https://prometheus.io/docs/introduction/overview/
 Wants=network-online.target
 After=network-online.target
@@ -66,7 +66,7 @@ ExecStartPre=/usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
 
 ExecStart=/usr/local/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
-  --storage.tsdb.path=/var/lib/prometheus \
+  --storage.tsdb.path=/mnt/prometheus-db/prometheus \
   --web.console.templates=/etc/prometheus/consoles \
   --web.console.libraries=/etc/prometheus/console_libraries
 
@@ -90,7 +90,7 @@ RestrictRealtime=true
 RestrictNamespaces=true
 
 # Permisos necesarios
-ReadWritePaths=/var/lib/prometheus
+ReadWritePaths=/mnt/prometheus-db/prometheus
 ReadOnlyPaths=/etc/prometheus
 
 # Límites
