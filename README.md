@@ -42,7 +42,7 @@ sudo cp prometheus.yml /etc/prometheus/
 
 Add permissions:
 ```bash
-sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+sudo chown -R prometheus:prometheus /etc/prometheus /mnt/prometheus-data/prometheus
 ```
 
 Create service:
