@@ -46,7 +46,6 @@ Create directories:
 ```bash
 sudo mkdir /etc/prometheus
 sudo mkdir -p /mnt/prometheus-db/prometheus
-sudo cp prometheus.yml /etc/prometheus/
 ```
 
 Copy config file:
@@ -56,7 +55,8 @@ sudo cp prometheus.yml /etc/prometheus/
 
 Add permissions:
 ```bash
-sudo chown -R prometheus:prometheus /etc/prometheus /mnt/prometheus-data/prometheus
+sudo chown -R root:prometheus /etc/prometheus
+sudo chown -R /mnt/prometheus-data/prometheus
 ```
 
 Create service:
