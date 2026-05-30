@@ -4,11 +4,11 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install curl net-tools
+sudo apt install curl net-tools gnupg
 ```
 ## Prometheus 
-Create own user:
 
+Create own user:
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 ```
@@ -334,24 +334,20 @@ http://YOUR-PROMETHEUS-IP:9090/targets
 ---
 ## Grafana 
 
-Add stable repository:
-```bash
-apt install -y curl gnupg
-```
-
-# 1. Descargar y sobrescribir la llave de forma segura
+### Add stable repository:
+Download the key repository for Debian standar:
 ```bash
 curl -fsSL https://apt.grafana.com/gpg.key \
   | gpg --dearmor \
   | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
 ```
 
-# Add correct permissions to the key:
+Add correct permissions to the key:
 ```bash
 sudo chmod 644 /etc/apt/keyrings/grafana.gpg
 ```
 
-# 2. Crearte/ovewrithe the grafana.list
+Crearte/ovewrithe the grafana.list
 ```bash
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
   | sudo tee /etc/apt/sources.list.d/grafana.list > /dev/null
