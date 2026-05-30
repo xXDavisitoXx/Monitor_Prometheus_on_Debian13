@@ -317,6 +317,8 @@ Restart and check the service:
 sudo systemctl restart prometheus
 sudo systemctl status prometheus
 ```
+Test targets in Prometheus web:
+http://YOUR-PROMETHEUS-IP:9090/targets
 
 ---
 ## Grafana 
