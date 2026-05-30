@@ -147,6 +147,27 @@ sudo systemctl enable --now prometheus
 Try web acces:
 http://YOUR-IP:9090
 
+Create prometheus user to grafana server:
+Create password 
+Example:
+```bash
+htpasswd -nbBC 10 "" usergrafana | tr -d ':\n'
+$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG
+```
+
+Insert or crearte file /etc/prometheus/web.yml
+```bash
+sudo nano /etc/prometheus/web.yml
+```
+
+```bash
+basic_auth_users:
+  grafauser: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
+```
+
+
+
+
 ## Node-Exporter
 Create user:
 ```bash
@@ -302,25 +323,6 @@ Test metrics in to file:
 ```bash
 curl http://localhost:9100/metrics > metrics.txt
 ```
-
-Create prometheus user to grafana server:
-
-Example:
-```bash
-htpasswd -nbBC 10 "" usergrafana | tr -d ':\n'
-$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG
-```
-
-Insert or crearte file /etc/prometheus/web.yml
-```bash
-sudo nano /etc/prometheus/web.yml
-```
-
-```bash
-basic_auth_users:
-  grafauser: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
-```
-
 
 Add node_exporter server metrics to Prometheus server:
 ```bash
