@@ -400,4 +400,9 @@ Try web acces:
 http://YOUR-IP:3000/
 
 Default-login:
+- User: admin
+- Pass: admin
+
+Home Dashboard:
+
 
