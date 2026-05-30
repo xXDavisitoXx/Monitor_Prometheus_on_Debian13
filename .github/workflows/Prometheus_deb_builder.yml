@@ -99,12 +99,14 @@ jobs:
           Description: Custom clean build of Prometheus without junk dependencies.
           EOF
 
-          # Post-Installation Script (Hardening: forces /bin/false shell on Debian)
+          # Post-Installation Script (Optimized Secure System User Creation)
           cat <<EOF > "${PACKDIR}/DEBIAN/postinst"
           #!/bin/bash
           set -e
-          echo "👤 Configuring system environment for Prometheus..."
-          id -u prometheus &>/dev/null || useradd --system --home-dir /var/lib/prometheus --shell /bin/false prometheus
+          echo "👤 Configuring secure system environment for Prometheus..."
+          
+          # Upgraded secure user creation using nologin and preventing home skeleton generation
+          id -u prometheus &>/dev/null || useradd --system --no-create-home --home-dir /var/lib/prometheus --shell /usr/sbin/nologin prometheus
 
           mkdir -p /var/lib/prometheus
           chown -R prometheus:prometheus /var/lib/prometheus
@@ -115,6 +117,37 @@ jobs:
           fi
           EOF
           chmod 755 "${PACKDIR}/DEBIAN/postinst"
+
+          # Pre-Removal Script (Graceful Service Termination)
+          cat <<EOF > "${PACKDIR}/DEBIAN/prerm"
+          #!/bin/bash
+          set -e
+          if [ -d /run/systemd/system ] && systemctl is-active --quiet prometheus; then
+              echo "🛑 Stopping Prometheus service before package removal..."
+              systemctl stop prometheus
+          fi
+          EOF
+          chmod 755 "${PACKDIR}/DEBIAN/prerm"
+
+          # Post-Removal Script (Impeccable System Purging)
+          cat <<EOF > "${PACKDIR}/DEBIAN/postrm"
+          #!/bin/bash
+          set -e
+          if [ "\$1" = "purge" ]; then
+              echo "🧹 Purging Prometheus data, configurations, and system user..."
+              rm -rf /var/lib/prometheus
+              rm -rf /etc/prometheus
+              
+              if id prometheus &>/dev/null; then
+                  userdel prometheus
+              fi
+          fi
+
+          if [ -d /run/systemd/system ]; then
+              systemctl daemon-reload
+          fi
+          EOF
+          chmod 755 "${PACKDIR}/DEBIAN/postrm"
 
           echo "🔨 Building .deb package using dpkg-deb..."
           dpkg-deb --build "${PACKDIR}" "${CURRENT_DIR}"
@@ -134,4 +167,4 @@ jobs:
           echo "🎁 Publishing package to GitHub Releases..."
           gh release create "v${LAST_VERSION}" "${DEB_FILE}" \
             --title "Prometheus v${LAST_VERSION} (Debian Package)" \
-            --notes "Automated clean .deb package build for Prometheus v${LAST_VERSION}. Optimized for Debian 13."
+            --notes "Automated clean .deb package build for Prometheus v${LAST_VERSION}. Optimized for Debian 13 with hardened nologin system user."
