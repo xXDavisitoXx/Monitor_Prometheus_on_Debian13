@@ -113,17 +113,25 @@ LimitNOFILE=65536
 WantedBy=multi-user.target
 ```
 Enable and Start service:
-
+Reaload daemon and trey start service:
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl start prometheus
-sudo systemctl enable --now prometheus
-sudo systemctl status prometheus
 ```
+
+⚠️ If dont run use this command and read errors:
+```bash
+journalctl -xeu prometheus.service
+```
+
+✔️ If this script run use:
+```bash
+sudo systemctl status prometheus
+sudo systemctl enable --now prometheus
+```
+
 Try web acces:
 http://YOUR-IP:9090
-
----
 
 ## Node-Exporter
 Create user:
