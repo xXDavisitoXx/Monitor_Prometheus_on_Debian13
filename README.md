@@ -342,18 +342,34 @@ sudo chmod 644 /etc/apt/keyrings/grafana.asc
 ```
 
 Add stable repository:
-
 ```bash
-echo "deb [signed-by=/etc/apt/keyrings/grafana.asc] https://apt.grafana.com stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+apt install -y curl gnupg
 ```
-Refresh APT: 
 
+# 1. Descargar y sobrescribir la llave de forma segura
+```bash
+curl -fsSL https://apt.grafana.com/gpg.key \
+  | gpg --dearmor \
+  | sudo tee /etc/apt/keyrings/grafana.gpg > /dev/null
+```
+
+# Add correct permissions to the key:
+```bash
+sudo chmod 644 /etc/apt/keyrings/grafana.gpg
+```
+
+# 2. Crearte/ovewrithe the grafana.list
+```bash
+echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
+  | sudo tee /etc/apt/sources.list.d/grafana.list > /dev/null
+```
+
+Refresh APT:
 ```bash
 apt update
 ```
 
 Install Grafana:
-
 ```bash
 apt install grafana
 ```
