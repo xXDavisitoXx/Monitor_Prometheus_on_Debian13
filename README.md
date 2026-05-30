@@ -94,8 +94,7 @@ ExecStartPre=/usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
 ExecStart=/usr/local/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
   --storage.tsdb.path=/mnt/prometheus-data/prometheus \
-  --web.console.templates=/etc/prometheus/consoles \
-  --web.console.libraries=/etc/prometheus/console_libraries
+  --web.config.file=/etc/prometheus/web.yml
 
 Restart=on-failure
 RestartSec=5s
