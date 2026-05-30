@@ -4,7 +4,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install curl net-tools gnupg
+sudo apt install curl net-tools gnupg apache2-utils
 ```
 ## Prometheus 
 ### Install prometheus:
@@ -305,24 +305,21 @@ curl http://localhost:9100/metrics > metrics.txt
 ```
 
 Create prometheus user to grafana server:
-```bash
-echo -n "YOUR-PASSWORD" | openssl passwd -6 -stdin
-```
 
 Example:
 ```bash
-echo -n "usergrafana" | openssl passwd -6 -stdin
-$6$PwS0rt6/i/vj4GhL$efjxuE.rfDDdHYzWgaM9dACfy0NWQY.krbi4Z1iJ8eNZjHxrxSUh0OkRaI.u6ZQzeMCZAdXrqfCfWytVELUmN.
+htpasswd -nbBC 10 "" usergrafana | tr -d ':\n'
+$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG
 ```
 
 Insert or crearte file /etc/prometheus/web.yml
 ```bash
-/etc/prometheus/web.yml
+sudo nano /etc/prometheus/web.yml
 ```
 
 ```bash
 basic_auth_users:
-  grafauser: "$6$PwS0rt6/i/vj4GhL$efjxuE.rfDDdHYzWgaM9dACfy0NWQY.krbi4Z1iJ8eNZjHxrxSUh0OkRaI.u6ZQzeMCZAdXrqfCfWytVELUmN."
+  grafauser: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
 ```
 
 
