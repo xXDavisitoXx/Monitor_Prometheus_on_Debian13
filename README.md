@@ -120,7 +120,8 @@ sudo systemctl start prometheus
 
 ⚠️ If dont run use this command and read errors:
 ```bash
-journalctl -xeu prometheus.service
+journalctl -xeu prometheus
+sudo journalctl -u prometheus --no-pager -n 50
 ```
 
 ✔️ If this script run use:
@@ -251,12 +252,36 @@ WantedBy=multi-user.target
 
 ```
 
-Start and enable service:
+Reload service:
 ```bash
 sudo systemctl daemon-reload
+```
+
+start service:
+```bash
 sudo systemctl start node_exporter
+```
+
+❗If the service fail check nad resolv errors:
+```bash
+journalctl -xeu prometheus
+sudo journalctl -u node_exporter --no-pager -n 50
+```
+
+If the service start good enable service:
+```bash
 sudo systemctl enable --now node_exporter
 sudo systemctl status node_exporter
+```
+
+Test service listen:
+```bash
+netstat -tnlp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 10.255.255.254:53       0.0.0.0:*               LISTEN      -
+tcp        0      0 127.0.0.1:9100          0.0.0.0:*               LISTEN      1134/node_exporter
+tcp6       0      0 :::9090                 :::*                    LISTEN      1253/prometheus
 ```
 
 Test metrics:
