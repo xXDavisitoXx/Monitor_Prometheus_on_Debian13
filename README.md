@@ -303,6 +303,18 @@ Test metrics in to file:
 ```bash
 curl http://localhost:9100/metrics > metrics.txt
 ```
+
+Create prometheus user to grafana server:
+```bash
+echo -n "YOUR-PASSWORD" | openssl passwd -6 -stdin
+```
+
+Example:
+```bash
+echo -n "grafauser" | openssl passwd -6 -stdin
+$6$yWob5OI71A6cWU71$cncrJxE9zdxEvzyYJxFbLJ8.76BclKSiuj..joV3Gh6MNTbxvpe9PgVTNCIBQZPMA8LYgeGPVTMWg7XRUQ2zJ0
+```
+
 Add node_exporter server metrics to Prometheus server:
 ```bash
 nano /etc/prometheus/prometheus.yml
