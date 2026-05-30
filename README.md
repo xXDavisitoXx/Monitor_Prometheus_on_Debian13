@@ -15,7 +15,6 @@ sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 
 Download packet:
 
-
 Last version auto command:
 ```bash
 curl -LO $( \
@@ -135,29 +134,39 @@ http://YOUR-IP:9090
 
 ## Node-Exporter
 Create user:
-
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin node_exporter
 ```
 
-Download and install:
+Download automatic latest command:
+```bash
+curl -LO $( \
+  curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest \
+  | grep "browser_download_url.*linux-amd64.tar.gz" \
+  | cut -d '"' -f 4 \
+)
+```
+
+Manual version download:
 ```bash
 wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
+```
+Descomppress:
+```bash
 tar xvfz node_exporter-1.10.2.linux-amd64.tar.gz
 cd node_exporter-1.10.2.linux-amd64
-./node_exporter
 ```
 
 Copy binaries:
 ```bash
-sudo cp node_exporter-1.10.2.linux-amd64/node_exporter /usr/local/bin/
-sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+sudo cp node_exporter /usr/local/bin/
 ```
 
 Create service: 
 ```bash
 sudo nano /etc/systemd/system/node_exporter.service
 ```
+
 ```bash
 [Unit]
 Description=Prometheus Node Exporter
