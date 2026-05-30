@@ -288,7 +288,33 @@ Test metrics in to file:
 ```bash
 curl http://localhost:9100/metrics > metrics.txt
 ```
+Add node_exporter server metrics to Prometheus server:
+```bash
+nano /etc/prometheus/prometheus.yml
+```
 
+```bash
+# [=== Node Exporter Prometheus Server===]
+  - job_name: "node_exporter"
+    static_configs:
+      - targets: ["localhost:9100"]
+        labels:
+          app: "node_exporter"
+```
+Add automatic targets folder:
+```bash
+# [=== Node Exporter Target Hosts===]
+  - job_name: 'dynamic_hosts'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/targets/*.yml'
+          - '/etc/prometheus/targets/*.json'
+        refresh_interval: 5m
+```
+
+```bash
+
+```
 ---
 ## Grafana 
 Import the GPG key:
