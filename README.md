@@ -268,13 +268,13 @@ journalctl -xeu prometheus
 sudo journalctl -u node_exporter --no-pager -n 50
 ```
 
-If the service start good enable service:
+✔️ If the service start good enable service:
 ```bash
 sudo systemctl enable --now node_exporter
 sudo systemctl status node_exporter
 ```
 
-Test service listen:
+Test services listen:
 ```bash
 netstat -tnlp
 Active Internet connections (only servers)
@@ -288,8 +288,6 @@ Test metrics:
 ```bash
 curl http://localhost:9100/metrics
 ```
-
-
 
 ---
 ## Grafana 
