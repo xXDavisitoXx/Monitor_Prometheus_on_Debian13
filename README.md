@@ -79,7 +79,7 @@ ExecStartPre=/usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
 
 ExecStart=/usr/local/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
-  --storage.tsdb.path=/mnt/prometheus-db/prometheus \
+  --storage.tsdb.path=/mnt/prometheus-data/prometheus \
   --web.console.templates=/etc/prometheus/consoles \
   --web.console.libraries=/etc/prometheus/console_libraries
 
@@ -103,7 +103,7 @@ RestrictRealtime=true
 RestrictNamespaces=true
 
 # Permisos necesarios
-ReadWritePaths=/mnt/prometheus-db/prometheus
+ReadWritePaths=/mnt/prometheus-data/prometheus
 ReadOnlyPaths=/etc/prometheus
 
 # Límites
