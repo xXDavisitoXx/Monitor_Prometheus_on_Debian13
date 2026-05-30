@@ -284,9 +284,9 @@ tcp        0      0 127.0.0.1:9100          0.0.0.0:*               LISTEN      
 tcp6       0      0 :::9090                 :::*                    LISTEN      1253/prometheus
 ```
 
-Test metrics:
+Test metrics in to file:
 ```bash
-curl http://localhost:9100/metrics
+curl http://localhost:9100/metrics > metrics.txt
 ```
 
 ---
