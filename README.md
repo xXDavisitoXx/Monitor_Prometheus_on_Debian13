@@ -312,9 +312,12 @@ Add automatic targets folder:
         refresh_interval: 5m
 ```
 
+Restart and check the service:
 ```bash
-
+sudo systemctl restart prometheus
+sudo systemctl status prometheus
 ```
+
 ---
 ## Grafana 
 Import the GPG key:
