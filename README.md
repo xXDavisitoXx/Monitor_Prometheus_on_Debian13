@@ -182,7 +182,7 @@ ExecStart=/usr/local/bin/node_exporter
 [Install]
 WantedBy=multi-user.target
 ```
-Hardenizado:
+Hardened:
 ```bash
 [Unit]
 Description=Prometheus Node Exporter
@@ -197,13 +197,12 @@ User=node_exporter
 Group=node_exporter
 
 ExecStart=/usr/local/bin/node_exporter \
-  --web.listen-address=:9100
+  --web.listen-address=127.0.0.1:9100
 
 Restart=on-failure
 RestartSec=5s
 
-# ===== Seguridad =====
-
+# ===== Seguridad Fuerte =====
 NoNewPrivileges=true
 PrivateTmp=true
 PrivateDevices=true
@@ -228,24 +227,18 @@ RemoveIPC=true
 
 SystemCallArchitectures=native
 
-# ===== CONTROL DE RED =====
+# ===== Control de Red (Localhost Seguro) =====
 IPAddressDeny=any
 IPAddressAllow=127.0.0.1
 IPAddressAllow=::1
 
-# Solo permitir familias de sockets necesarias
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+# AF_NETLINK es vital para las métricas de red (dev, tcp, etc.)
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
 
-# Node Exporter necesita leer /proc y /sys
-ProcSubset=pid
-
-# Permitir acceso de solo lectura al sistema
-ReadOnlyPaths=/
-
-# Permitir acceso explícito a métricas kernel
+# Permitir acceso a recursos de ejecución necesarios
 ReadWritePaths=/run
 
-# Capabilities
+# Capabilities vacías (No necesita privilegios de root para leer /proc)
 CapabilityBoundingSet=
 AmbientCapabilities=
 
@@ -255,6 +248,7 @@ TasksMax=1024
 
 [Install]
 WantedBy=multi-user.target
+
 ```
 
 Start and enable service:
