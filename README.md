@@ -4,7 +4,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install curl
+sudo apt install curl net-tools
 ```
 ## Prometheus 
 Create own user:
