@@ -333,13 +333,6 @@ http://YOUR-PROMETHEUS-IP:9090/targets
 
 ---
 ## Grafana 
-Import the GPG key:
-
-```bash
-sudo mkdir -p /etc/apt/keyrings
-sudo wget -O /etc/apt/keyrings/grafana.asc https://apt.grafana.com/gpg-full.key
-sudo chmod 644 /etc/apt/keyrings/grafana.asc
-```
 
 Add stable repository:
 ```bash
