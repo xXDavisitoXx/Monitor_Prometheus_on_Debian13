@@ -26,7 +26,6 @@ jobs:
           echo "📦 Latest upstream version found: v${LAST_VERSION}"
 
           # --- IDEMPOTENCY CHECK ---
-          # Read the version stored in the repo to avoid building the same package twice
           CURRENT_VERSION="0.0.0"
           if [ -f .version ]; then
             CURRENT_VERSION=$(cat .version)
@@ -45,7 +44,7 @@ jobs:
           URL="https://github.com/prometheus/prometheus/releases/download/v${LAST_VERSION}/${TARBALL}"
 
           CURRENT_DIR=$(pwd)
-          PACKDIR="${CURRENT_DIR}/prometheus_${LAST_VERSION}-1_amd64"
+          PACKDIR="${CURRENT_DIR}/prometheus_${LAST_VERSION}_amd64"
           TMP_DIR="/tmp/download-prometheus"
 
           rm -rf "${PACKDIR}" "${TMP_DIR}"
@@ -121,10 +120,9 @@ jobs:
           dpkg-deb --build "${PACKDIR}" "${CURRENT_DIR}"
           
           # Target the exact filename generated
-          DEB_FILE=$(ls prometheus_${LAST_VERSION}-1_amd64.deb)
+          DEB_FILE=$(ls prometheus_${LAST_VERSION}_amd64.deb)
 
           # --- SAVE CONFIGURATION STATE TO REPOSITORY ---
-          # Update the .version file so consecutive runs know this version is processed
           echo "$LAST_VERSION" > .version
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
