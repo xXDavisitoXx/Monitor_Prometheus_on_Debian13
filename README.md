@@ -301,7 +301,7 @@ nano /etc/prometheus/prometheus.yml
         labels:
           app: "node_exporter"
 ```
-Add automatic targets folder:
+Add job to automatic targets folder:
 ```bash
 # [=== Node Exporter Target Hosts===]
   - job_name: 'dynamic_hosts'
@@ -310,6 +310,17 @@ Add automatic targets folder:
           - '/etc/prometheus/targets/*.yml'
           - '/etc/prometheus/targets/*.json'
         refresh_interval: 5m
+```
+
+Example job Host1:
+nano /etc/prometheus/targets/host1.yml
+```bash
+- targets:
+    - '192.168.10.100:9100'  # Cambia esta IP por la del host real si no es local
+  labels:
+    hostname: 'host1'
+    entorno: 'laboratory'
+    sistema: 'debian13'
 ```
 
 Restart and check the service:
