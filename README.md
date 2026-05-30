@@ -368,22 +368,36 @@ apt install grafana
 ```
 
 Start and enable service:
-
 ```bash
 sudo systemctl start grafana-server
-sudo systemctl enable grafana-server
 ```
 
 Check status service:
+```bash
+sudo systemctl status grafana-server
+```
+Check listen service:
+```bash
+sudo netstat -tnlp
+```
 
 ```bash
-sudo systemctl start grafana-server
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 127.0.0.1:9100          0.0.0.0:*               LISTEN      305/node_exporter
+tcp        0      0 10.255.255.254:53       0.0.0.0:*               LISTEN      -
+tcp6       0      0 :::3000                 :::*                    LISTEN      1597/grafana
+tcp6       0      0 :::9090                 :::*                    LISTEN      397/prometheus
+```
+
+Enable service:
+```bash
 sudo systemctl enable grafana-server
-sudo systemctl status grafana-server
 ```
 
 Try web acces:
 
 http://YOUR-IP:3000/
 
+Default-login:
 
