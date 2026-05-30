@@ -16,6 +16,13 @@ it eliminates a significant amount of manual setup
 ```bash
 sudo apt install prometheus
 ```
+
+xXDavisitoXx .deb builder:
+## Descarga del Paquete .deb
+
+🟢 You can download the last .deb package made by my repository:
+👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/prometheus_deb_builder/releases/latest/download/prometheus_VERSION-1_amd64.deb)
+
 From manual mode:
 Create own user:
 ```bash
