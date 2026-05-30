@@ -7,7 +7,16 @@ Install the prerequisite packages:
 sudo apt install curl net-tools gnupg
 ```
 ## Prometheus 
-
+### Install prometheus:
+ 
+From APT:
+⚠️ Not recommended, Installing via apt is not recommended for up-to-date deployments, 
+as the package updates slowly. That said, if using an older version is acceptable, 
+it eliminates a significant amount of manual setup
+```bash
+sudo apt install prometheus
+```
+From manual mode:
 Create own user:
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
