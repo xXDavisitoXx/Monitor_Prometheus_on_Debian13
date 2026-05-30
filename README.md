@@ -311,9 +311,20 @@ echo -n "YOUR-PASSWORD" | openssl passwd -6 -stdin
 
 Example:
 ```bash
-echo -n "grafauser" | openssl passwd -6 -stdin
-$6$yWob5OI71A6cWU71$cncrJxE9zdxEvzyYJxFbLJ8.76BclKSiuj..joV3Gh6MNTbxvpe9PgVTNCIBQZPMA8LYgeGPVTMWg7XRUQ2zJ0
+echo -n "usergrafana" | openssl passwd -6 -stdin
+$6$PwS0rt6/i/vj4GhL$efjxuE.rfDDdHYzWgaM9dACfy0NWQY.krbi4Z1iJ8eNZjHxrxSUh0OkRaI.u6ZQzeMCZAdXrqfCfWytVELUmN.
 ```
+
+Insert or crearte file /etc/prometheus/web.yml
+```bash
+/etc/prometheus/web.yml
+```
+
+```bash
+basic_auth_users:
+  grafauser: "$6$PwS0rt6/i/vj4GhL$efjxuE.rfDDdHYzWgaM9dACfy0NWQY.krbi4Z1iJ8eNZjHxrxSUh0OkRaI.u6ZQzeMCZAdXrqfCfWytVELUmN."
+```
+
 
 Add node_exporter server metrics to Prometheus server:
 ```bash
