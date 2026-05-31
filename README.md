@@ -436,6 +436,45 @@ Default-login:
 - User: admin
 - Pass: admin
 
+grafana_login PNG
+
+Change password to grafana: 
+
+Grafana_change_pass PNG
+
+Grafana 
 Home Dashboard:
+
+Grafana web_home.png
+
+
+Add Prometheus to grafana data source:
+
+Grafana_add_data_source.png
+
+
+select pPromtheus source:
+Grafana_select_prometeus_source.png
+
+
+Configure autentication and IP conection data:
+
+Grafana_Configure_Prometheus_auth.png
+
+
+TEst and veify mensaje :
+Grafana_surccesful_add_prometheus.png
+
+
+ADd dashboard gragana to promtehus:
+
+We use node exporter full and redis dashboard to prometheus 
+
+https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+ID: 1860
+https://grafana.com/grafana/dashboards/11835-redis-dashboard-for-prometheus-redis-exporter-helm-stable-redis-ha/
+ID: 11835
+
+Grafana_select_menu_import_dashboard.png
 
 
