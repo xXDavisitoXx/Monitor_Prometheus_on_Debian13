@@ -460,7 +460,7 @@ Default-login:
 - Pass: admin
 
 <p align="center">
-    <img src="Images/Guide/Grafana-Images/Gragafana_login.png" width="50%">
+    <img src="Images/Guide/Grafana-Images/Grafana_login.png" width="50%">
 </p>
 
 Change password to grafana: 
