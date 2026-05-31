@@ -4,7 +4,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install curl net-tools gnupg apache2-utils
+sudo apt install curl net-tools gnupg whois
 ```
 ## Prometheus 
 ### Install prometheus:
@@ -148,11 +148,11 @@ Try web acces:
 http://YOUR-IP:9090
 
 Create prometheus user to grafana server:
-Create password 
+Create Bcrypt password:
 Example:
 ```bash
-htpasswd -nbBC 10 "" usergrafana | tr -d ':\n'
-$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG
+mkpasswd -m bcrypt grafanauser
+$2b$05$FKb0e4JKCkpWI7.QZmLPs.gQnUwcYIxZJndUsermTspttT/pqkBYG
 ```
 
 Insert or crearte file /etc/prometheus/web.yml
@@ -162,7 +162,7 @@ sudo nano /etc/prometheus/web.yml
 
 ```bash
 basic_auth_users:
-  grafauser: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
+  usergrafana: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
 ```
 
 
