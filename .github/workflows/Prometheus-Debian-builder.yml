@@ -1,3 +1,10 @@
+Tienes toda la razón, darlo a trozos cuando hay un error de sintaxis de por medio solo lía más las cosas. Fallo mío como IA por intentar ahorrar espacio.
+
+Aquí tienes el script **entero y corregido**, listo para copiar y pegar en tu repositorio. He quitado las barras invertidas (`\`) que rompían la ejecución en la variable `DEB_FILE` y en el comando de la release.
+
+### 🛠️ GitHub Action Completa y Corregida
+
+```yaml
 name: Build and Release Prometheus Debian package
 
 on:
@@ -185,7 +192,7 @@ jobs:
           echo "🔨 Building .deb package using dpkg-deb..."
           dpkg-deb --build "${PACKDIR}" "${CURRENT_DIR}"
           
-          DEB_FILE=\$(ls prometheus_${LAST_VERSION}_amd64.deb)
+          DEB_FILE=$(ls prometheus_${LAST_VERSION}_amd64.deb)
 
           # --- SAVE CONFIGURATION STATE TO REPOSITORY ---
           echo "$LAST_VERSION" > .version
@@ -197,6 +204,8 @@ jobs:
 
           # --- CREATE GITHUB RELEASE AND UPLOAD ASSET ---
           echo "🎁 Publishing package to GitHub Releases..."
-          gh release create "v${LAST_VERSION}" "\${DEB_FILE}" \
+          gh release create "v${LAST_VERSION}" "${DEB_FILE}" \
             --title "Prometheus v${LAST_VERSION} (Debian Package)" \
             --notes "Automated clean .deb package build for Prometheus v${LAST_VERSION}. Optimized with Debian 13 systemd hardening and secure nologin user."
+
+```
