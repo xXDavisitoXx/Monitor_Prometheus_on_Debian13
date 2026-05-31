@@ -1,0 +1,202 @@
+name: Build and Release Prometheus DEB
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Check for updates every day at midnight
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required permission to create Releases and push the version file
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Package application and publish Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+
+          echo "🔍 Fetching latest Prometheus version from GitHub upstream..."
+          LAST_VERSION=$(curl -s https://api.github.com/repos/prometheus/prometheus/releases/latest | grep -Po '"tag_name": "v\K[^"]*')
+          echo "📦 Latest upstream version found: v${LAST_VERSION}"
+
+          # --- IDEMPOTENCY CHECK ---
+          CURRENT_VERSION="0.0.0"
+          if [ -f .version ]; then
+            CURRENT_VERSION=$(cat .version)
+          fi
+          echo "Currently packaged version in this repo: $CURRENT_VERSION"
+
+          if [ "$LAST_VERSION" = "$CURRENT_VERSION" ]; then
+            echo "✅ Package is already up to date with the latest version ($LAST_VERSION). Stopping workflow."
+            exit 0
+          fi
+
+          echo "🚀 New version detected. Starting build process..."
+
+          # --- SCRIPT ENVIRONMENT CONFIGURATION ---
+          TARBALL="prometheus-${LAST_VERSION}.linux-amd64.tar.gz"
+          URL="https://github.com/prometheus/prometheus/releases/download/v${LAST_VERSION}/${TARBALL}"
+
+          CURRENT_DIR=$(pwd)
+          PACKDIR="${CURRENT_DIR}/prometheus_${LAST_VERSION}_amd64"
+          TMP_DIR="/tmp/download-prometheus"
+
+          rm -rf "${PACKDIR}" "${TMP_DIR}"
+
+          # Estructura de directorios fusionada (Estilo Debian)
+          mkdir -p "${PACKDIR}/DEBIAN"
+          mkdir -p "${PACKDIR}/usr/local/bin"
+          mkdir -p "${PACKDIR}/etc/prometheus"
+          mkdir -p "${PACKDIR}/var/lib/prometheus/metrics2"
+          mkdir -p "${PACKDIR}/var/log/prometheus"
+          mkdir -p "${PACKDIR}/lib/systemd/system"
+          mkdir -p "${TMP_DIR}"
+
+          echo "📥 Downloading ${TARBALL}..."
+          curl -L -o "${TMP_DIR}/${TARBALL}" "${URL}"
+
+          echo "📦 Extracting files..."
+          tar -xzf "${TMP_DIR}/${TARBALL}" -C "${TMP_DIR}"
+
+          SOURCE_DIR="${TMP_DIR}/prometheus-${LAST_VERSION}.linux-amd64"
+
+          echo "🏗️ Copying binaries and configuration to layout directory..."
+          # Se usan en /usr/local/bin para evitar pisar paquetes apt si el usuario instala el oficial por error
+          cp "${SOURCE_DIR}/prometheus" "${PACKDIR}/usr/local/bin/"
+          cp "${SOURCE_DIR}/promtool" "${PACKDIR}/usr/local/bin/"
+          cp "${SOURCE_DIR}/prometheus.yml" "${PACKDIR}/etc/prometheus/"
+
+          # --- SYSTEMD SERVICE FILE (Hardening oficial de Debian 13) ---
+          cat <<EOF > "${PACKDIR}/lib/systemd/system/prometheus.service"
+          [Unit]
+          Description=Prometheus Monitoring System (Custom Clean Build)
+          Documentation=https://prometheus.io/docs/introduction/overview/ man:prometheus(1)
+          After=network-online.target time-sync.target
+          Wants=network-online.target
+
+          [Service]
+          Restart=on-abnormal
+          User=prometheus
+          Group=prometheus
+          Type=simple
+          ExecStart=/usr/local/bin/prometheus \\
+            --config.file=/etc/prometheus/prometheus.yml \\
+            --storage.tsdb.path=/var/lib/prometheus/metrics2
+          ExecReload=/bin/kill -HUP \$MAINPID
+          TimeoutStopSec=20s
+          SendSIGKILL=no
+
+          # systemd hardening-options
+          AmbientCapabilities=
+          CapabilityBoundingSet=
+          DeviceAllow=/dev/null rw
+          DevicePolicy=strict
+          LimitMEMLOCK=0
+          LockPersonality=true
+          MemoryDenyWriteExecute=true
+          NoNewPrivileges=true
+          PrivateDevices=true
+          PrivateTmp=true
+          PrivateUsers=true
+          ProtectControlGroups=true
+          ProtectHome=true
+          ProtectKernelModules=true
+          ProtectKernelTunables=true
+          ProtectSystem=full
+          RemoveIPC=true
+          RestrictNamespaces=true
+          RestrictRealtime=true
+          SystemCallArchitectures=native
+
+          [Install]
+          WantedBy=multi-user.target
+          EOF
+
+          # Official Debian Package Metadata
+          cat <<EOF > "${PACKDIR}/DEBIAN/control"
+          Package: prometheus
+          Version: ${LAST_VERSION}
+          Section: utils
+          Priority: optional
+          Architecture: amd64
+          Maintainer: xXDavisitoxXx
+          Provides: prometheus
+          Description: Custom clean build of Prometheus. Combines official binaries with Debian 13 hardening.
+          EOF
+
+          # --- POST-INSTALLATION SCRIPT ---
+          cat <<EOF > "${PACKDIR}/DEBIAN/postinst"
+          #!/bin/bash
+          set -e
+          echo "👤 Configuring secure system environment for Prometheus..."
+          
+          # Creación de usuario fusionada: tu nologin + gecos/group de Debian
+          id -u prometheus &>/dev/null || useradd --system --no-create-home --home-dir /var/lib/prometheus --shell /usr/sbin/nologin --user-group -c "Prometheus daemon" prometheus
+
+          # Permisos para la nueva estructura de directorios
+          chown -R prometheus:prometheus /var/lib/prometheus
+          chown -R prometheus:prometheus /var/log/prometheus
+          chown -R prometheus:prometheus /etc/prometheus
+
+          if [ -d /run/systemd/system ]; then
+              systemctl daemon-reload
+          fi
+          EOF
+          chmod 755 "${PACKDIR}/DEBIAN/postinst"
+
+          # --- PRE-REMOVAL SCRIPT ---
+          cat <<EOF > "${PACKDIR}/DEBIAN/prerm"
+          #!/bin/bash
+          set -e
+          if [ -d /run/systemd/system ] && systemctl is-active --quiet prometheus; then
+              echo "🛑 Stopping Prometheus service before package removal..."
+              systemctl stop prometheus
+          fi
+          EOF
+          chmod 755 "${PACKDIR}/DEBIAN/prerm"
+
+          # --- POST-REMOVAL SCRIPT ---
+          cat <<EOF > "${PACKDIR}/DEBIAN/postrm"
+          #!/bin/bash
+          set -e
+          if [ "\$1" = "purge" ]; then
+              echo "🧹 Purging Prometheus data, configurations, and system user..."
+              rm -rf /var/lib/prometheus
+              rm -rf /etc/prometheus
+              rm -rf /var/log/prometheus
+              
+              if id prometheus &>/dev/null; then
+                  userdel prometheus
+              fi
+          fi
+
+          if [ -d /run/systemd/system ]; then
+              systemctl daemon-reload
+          fi
+          EOF
+          chmod 755 "${PACKDIR}/DEBIAN/postrm"
+
+          echo "🔨 Building .deb package using dpkg-deb..."
+          dpkg-deb --build "${PACKDIR}" "${CURRENT_DIR}"
+          
+          DEB_FILE=\$(ls prometheus_${LAST_VERSION}_amd64.deb)
+
+          # --- SAVE CONFIGURATION STATE TO REPOSITORY ---
+          echo "$LAST_VERSION" > .version
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .version
+          git commit -m "Bump version to $LAST_VERSION [skip ci]"
+          git push origin main
+
+          # --- CREATE GITHUB RELEASE AND UPLOAD ASSET ---
+          echo "🎁 Publishing package to GitHub Releases..."
+          gh release create "v${LAST_VERSION}" "\${DEB_FILE}" \
+            --title "Prometheus v${LAST_VERSION} (Debian Package)" \
+            --notes "Automated clean .deb package build for Prometheus v${LAST_VERSION}. Optimized with Debian 13 systemd hardening and secure nologin user."
