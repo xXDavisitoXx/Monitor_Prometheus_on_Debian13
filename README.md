@@ -472,8 +472,8 @@ We use node exporter full and redis dashboard to prometheus
 
 https://grafana.com/grafana/dashboards/1860-node-exporter-full/
 ID: 1860
-https://grafana.com/grafana/dashboards/11835-redis-dashboard-for-prometheus-redis-exporter-helm-stable-redis-ha/
-ID: 11835
+https://grafana.com/grafana/dashboards/3662-prometheus-2-0-overview/
+ID: 3662
 
 Grafana_select_menu_import_dashboard.png
 
