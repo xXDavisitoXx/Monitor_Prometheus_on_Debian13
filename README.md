@@ -189,7 +189,7 @@ Try web acces:
  - User: usergrafana
  - Pass: grafanauser
 <p align="center">
-    <img src="Images/Guide/Prometheus-Images/Prometheus_Login.png" width="100%">
+    <img src="Images/Guide/Prometheus-Images/Prometheus_Login.png" width="50%">
 </p>
 
 ## Node-Exporter
