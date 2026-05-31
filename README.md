@@ -18,9 +18,12 @@ sudo apt install prometheus
 ```
 
 xXDavisitoXx .deb builder:
-## Descarga del Paquete .deb
+## [== Alternative Download .deb Packet ==]
 
 🟢 You can download the last .deb package made by my repository: 
+I have extracted the basic installation instructions and the service created by the official Debian APT package, 
+and I have integrated them into the binaries to automatically offer the latest version,
+ready for an automated installation on Debian
 👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/latest/download/prometheus_3.10.0_amd64.deb)
 From manual mode:
 Create own user:
