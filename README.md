@@ -162,9 +162,15 @@ sudo systemctl enable --now prometheus
 ```
 
 Try web acces:
-http://YOUR-IP:9090
+in yo browser http://YOUR-IP:9090:0
 
-Create prometheus user to grafana server:
+<p align="center">
+  <a href="URL_A_DONDE_QUIERES_IR">
+    <img src="Images/Guide/Prometheus-Images/Prometheus_Login.png" width="100%">
+  </a>
+</p>
+
+### Create prometheus user to grafana server:
 Create Bcrypt password:
 Example:
 ```bash
@@ -184,7 +190,9 @@ basic_auth_users:
 Try web acces:
  - User: usergrafana
  - Pass: grafanauser
-PNG 
+<p align="center">
+    <img src="Images/Repository/Prometheus_Repository_Cover.png" alt="Prometheus-Repository-Cover" width="100%">
+</p>
 
 ## Node-Exporter
 Create user:
