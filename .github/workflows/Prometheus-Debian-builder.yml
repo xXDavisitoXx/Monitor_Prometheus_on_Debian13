@@ -1,4 +1,4 @@
-name: Build and Release Prometheus DEB
+name: Build and Release Prometheus Debian package
 
 on:
   schedule:
