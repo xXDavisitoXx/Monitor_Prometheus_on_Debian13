@@ -5,7 +5,7 @@ Aquí tienes el script **entero y corregido**, listo para copiar y pegar en tu r
 ### 🛠️ GitHub Action Completa y Corregida
 
 ```yaml
-name: Build and Release Prometheus Debian .deb
+name: Build and Release Prometheus debian
 
 on:
   schedule:
