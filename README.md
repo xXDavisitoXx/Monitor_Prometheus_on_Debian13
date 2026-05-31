@@ -26,7 +26,9 @@ and I have integrated them into the binaries to automatically offer the latest v
 ready for an automated installation on Debian
 
 👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/latest/download/prometheus_3.12.0_amd64.deb)
-⚠️ If the libk fail you can check the releases in this repository https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/
+
+⚠️ If the libk fail you can check the releases in this repository 
+https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/
 
 
 From manual mode:
