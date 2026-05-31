@@ -21,7 +21,7 @@ xXDavisitoXx .deb builder:
 ## Descarga del Paquete .deb
 
 🟢 You can download the last .deb package made by my repository: 
-👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/latest/download/prometheus_3.11.0_amd64.deb)
+👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/latest/download/prometheus_3.10.0_amd64.deb)
 From manual mode:
 Create own user:
 ```bash
