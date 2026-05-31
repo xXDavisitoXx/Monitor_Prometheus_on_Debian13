@@ -162,12 +162,10 @@ sudo systemctl enable --now prometheus
 ```
 
 Try web acces:
-in yo browser http://YOUR-IP:9090:0
+in yo browser http://YOUR-IP:9090:
 
 <p align="center">
-  <a href="URL_A_DONDE_QUIERES_IR">
-    <img src="Images/Guide/Prometheus-Images/Prometheus_Login.png" width="100%">
-  </a>
+    <img src="Images/Guide/Prometheus-Images/Prometeus_Web_Home.png" width="100%">
 </p>
 
 ### Create prometheus user to grafana server:
@@ -191,7 +189,7 @@ Try web acces:
  - User: usergrafana
  - Pass: grafanauser
 <p align="center">
-    <img src="Images/Repository/Prometheus_Repository_Cover.png" alt="Prometheus-Repository-Cover" width="100%">
+    <img src="Images/Guide/Prometheus-Images/Prometheus_Login.png" width="100%">
 </p>
 
 ## Node-Exporter
