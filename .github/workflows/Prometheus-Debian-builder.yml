@@ -2,14 +2,14 @@ name: Build and Release Prometheus debian
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Check for updates every day at midnight
-  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   check-and-build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Required permission to create Releases and push the version file
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -67,7 +67,6 @@ jobs:
           SOURCE_DIR="${TMP_DIR}/prometheus-${LAST_VERSION}.linux-amd64"
 
           echo "🏗️ Copying binaries and configuration to layout directory..."
-          # Se usan en /usr/local/bin para evitar pisar paquetes apt si el usuario instala el oficial por error
           cp "${SOURCE_DIR}/prometheus" "${PACKDIR}/usr/local/bin/"
           cp "${SOURCE_DIR}/promtool" "${PACKDIR}/usr/local/bin/"
           cp "${SOURCE_DIR}/prometheus.yml" "${PACKDIR}/etc/prometheus/"
@@ -125,7 +124,7 @@ jobs:
           Section: utils
           Priority: optional
           Architecture: amd64
-          Maintainer: xXDavisitoxXx
+          Maintainer: xXDavisitoXx
           Provides: prometheus
           Description: Custom clean build of Prometheus. Combines official binaries with Debian 13 hardening.
           EOF
