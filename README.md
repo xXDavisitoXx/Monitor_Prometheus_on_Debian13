@@ -477,4 +477,17 @@ ID: 11835
 
 Grafana_select_menu_import_dashboard.png
 
+PRometheus  dashboard:
+Grafana_import_prometheus_dashboard.png
 
+Configure name and selec to prometheus server 
+Grafana_add_configure_prometheus_dashboard.png
+
+Add node_Eporter dashboard
+Grafana_add_node_exporter_Daashboard.png
+
+Change name and import:
+Grafana_add_configure_node_exporter.png
+
+Check your dashboards run:
+Grafana_dashboardsh_installed.png
