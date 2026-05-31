@@ -155,18 +155,19 @@ mkpasswd -m bcrypt grafanauser
 $2b$05$FKb0e4JKCkpWI7.QZmLPs.gQnUwcYIxZJndUsermTspttT/pqkBYG
 ```
 
-Insert or crearte file /etc/prometheus/web.yml
+Insert or crearte file /etc/prometheus/web.yml:
 ```bash
 sudo nano /etc/prometheus/web.yml
 ```
-
+We will manually enter the username to be created and provide the bcrypt password generated previously
 ```bash
 basic_auth_users:
   usergrafana: "$2y$10$xcc6l6elxJ2f0Yyed7sq/unRWgSqw/hxXLSOieZEVwnCAPH6ZPRLG"
 ```
-
-
-
+Try web acces:
+ - User: usergrafana
+ - Pass: grafanauser
+PNG 
 
 ## Node-Exporter
 Create user:
