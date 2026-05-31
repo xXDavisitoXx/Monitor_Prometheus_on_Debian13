@@ -467,11 +467,10 @@ Change password to grafana:
 <p align="center">
     <img src="Images/Guide/Grafana-Images/Grafana_change_pass.png" width="50%">
 </p>
-Grafana_change_pass PNG
 
 Grafana 
 Home Dashboard:
-
+    <img src="Images/Guide/Grafana-Images/Grafana_Home.png" width="100%">
 Grafana web_home.png
 
 
