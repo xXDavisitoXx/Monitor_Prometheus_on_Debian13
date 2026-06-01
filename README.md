@@ -10,7 +10,7 @@
 
 Install the prerequisite packages:
 ```bash
-sudo apt install curl net-tools gnupg whois
+sudo apt install curl gnupg whois
 ```
 ## Prometheus 
 
@@ -362,7 +362,7 @@ sudo systemctl enable node_exporter
 
 Test services listen:
 ```bash
-netstat -tnlp
+ss -tnlp
 Active Internet connections (only servers)
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
 tcp        0      0 10.255.255.254:53       0.0.0.0:*               LISTEN      -
@@ -466,7 +466,7 @@ sudo systemctl status grafana-server
 
 Check listen service:
 ```bash
-sudo netstat -tnlp
+sudo ss -tnlp
 ```
 
 ```bash
