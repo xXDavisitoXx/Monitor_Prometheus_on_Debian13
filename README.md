@@ -152,12 +152,16 @@ journalctl -xeu prometheus
 sudo journalctl -u prometheus --no-pager -n 50
 ```
 
-✔️ If this script run use:
+✔️ If this script dont report any errors use:
+Check status:
 ```bash
 sudo systemctl status prometheus
-sudo systemctl enable --now prometheus
 ```
+Enable service:
+```bash
 
+sudo systemctl enable prometheus
+```
 Try web acces:
 in yo browser http://YOUR-IP:9090:
 
@@ -190,6 +194,7 @@ Try web acces:
 </p>
 
 ## Node-Exporter
+
 ### Install Node_Exporter
 Download and install automatic from APT:
 ⚠️ Not recomended, using Prometheus versions provided by apt is not recommended as they are significantly outdated:
@@ -345,11 +350,18 @@ journalctl -xeu prometheus
 sudo journalctl -u node_exporter --no-pager -n 50
 ```
 
-✔️ If the service start good enable service:
+✔️ If the service dont report any errors use:
+Status service:
 ```bash
-sudo systemctl enable --now node_exporter
 sudo systemctl status node_exporter
 ```
+
+Enable service:
+```bash
+sudo systemctl enable node_exporter
+
+```
+### Test Node Exporter
 
 Test services listen:
 ```bash
@@ -412,8 +424,10 @@ http://YOUR-PROMETHEUS-IP:9090/targets
 ---
 ## Grafana 
 
-### Add stable repository:
-Download the key repository for Debian standar:
+### Download Grafana from APT
+
+Add stable repository::
+Download the key repository for Debian stable:
 ```bash
 curl -fsSL https://apt.grafana.com/gpg.key \
   | gpg --dearmor \
@@ -436,14 +450,18 @@ Refresh APT:
 apt update
 ```
 
-Install Grafana:
+### Install Grafana fron APT:
 ```bash
 apt install grafana
 ```
 
-Start and enable service:
+Start service:
 ```bash
 sudo systemctl start grafana-server
+```
+Enable service:
+```bash
+sudo systemctl enable grafana-server
 ```
 
 Check status service:
