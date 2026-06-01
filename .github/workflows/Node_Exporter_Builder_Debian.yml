@@ -1,11 +1,12 @@
-name: Node Exporter Builder Debian
+name: Build and Release Node Exporter .deb
+
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *' # Comprobación diaria para automatización real
 
 permissions:
-  contents: write # Necesario para crear Releases y actualizar .version-node
+  contents: write # Necesario para crear Releases y actualizar .node-version
 
 jobs:
   check-and-build:
@@ -19,8 +20,8 @@ jobs:
       - name: Comprobar versiones (Local vs Upstream)
         id: version_check
         run: |
-          # Leer versión local o usar 0.0.0 si el archivo no existe aún
-          LOCAL_VERSION=$(cat .version-node 2>/dev/null || echo "0.0.0")
+          # Leer versión local desde la carpeta Versions o usar 0.0.0 si el archivo no existe aún
+          LOCAL_VERSION=$(cat Versions/.node-version 2>/dev/null || echo "0.0.0")
           
           # Obtener última versión oficial de Node Exporter
           UPSTREAM_VERSION=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/v//')
@@ -182,15 +183,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ESTE PASO SOLO SE EJECUTA SI LA SUBIDA DE LA RELEASE ANTERIOR FUE EXITOSA
-      - name: Actualizar y persistir .version-node en el repositorio
+      - name: Actualizar y persistir .node-version en el repositorio
         if: env.SHOULD_BUILD == 'true' && steps.create_release.outcome == 'success'
         run: |
-          echo "${{ env.VERSION }}" > .version-node
+          mkdir -p Versions
+          echo "${{ env.VERSION }}" > Versions/.node-version
           
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          git add .version-node
-          git commit -m "chore(version): update .version-node to ${{ env.VERSION }} [skip ci]"
+          git add Versions/.node-version
+          git commit -m "chore(version): update .node-version to ${{ env.VERSION }} [skip ci]"
           git push
