@@ -6,16 +6,15 @@
   <img src="Images/Repository/Prometheus_Repository_Cover.png" alt="Prometheus-Repository-Cover" width="100%">
 </p>
 
-### Install basic software
+## Install basic software
 
 Install the prerequisite packages:
 ```bash
 sudo apt install curl net-tools gnupg whois
 ```
 ## Prometheus 
-### Install prometheus:
- 
-From APT:
+
+### Download and install prometheus from APT:
 ⚠️ Not recommended, Installing via apt is not recommended for up-to-date deployments, 
 as the package updates slowly(2.53). That said, if using an older version is acceptable, 
 it eliminates a significant amount of manual setup
@@ -36,13 +35,11 @@ ready for an automated installation on Debian
 https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/
 
 
-From manual mode:
+### Download and install Prometheus on manual mode:
 Create own user:
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin prometheus
 ```
-
-Download packet:
 
 Last version auto command:
 ```bash
@@ -53,12 +50,12 @@ curl -LO $( \
 )
 ```
 
-static version guide:
+static version link:
 ```bash
 curl -LO https://github.com/prometheus/prometheus/releases/download/v3.12.0/prometheus-3.12.0.linux-amd64.tar.gz
 ```
-Descompress tar:
 
+Extrat tar.gz:
 ```bash
 tar -xvf prometheus-3.11.3.linux-amd64.tar.gz
 cd prometheus-3.12.0.linux-amd64
@@ -162,9 +159,9 @@ Enable service:
 
 sudo systemctl enable prometheus
 ```
-Try web acces:
-in yo browser http://YOUR-IP:9090:
 
+### Test Prometheus
+Try web acces in yo browser http://YOUR-IP:9090
 <p align="center">
     <img src="Images/Guide/Prometheus-Images/Prometeus_Web_Home.png" width="100%">
 </p>
@@ -424,10 +421,7 @@ http://YOUR-PROMETHEUS-IP:9090/targets
 ---
 ## Grafana 
 
-### Download Grafana from APT
-
-Add stable repository::
-Download the key repository for Debian stable:
+### Add repository for Graana stable:
 ```bash
 curl -fsSL https://apt.grafana.com/gpg.key \
   | gpg --dearmor \
@@ -439,7 +433,7 @@ Add correct permissions to the key:
 sudo chmod 644 /etc/apt/keyrings/grafana.gpg
 ```
 
-Crearte/ovewrithe the grafana.list
+Create grafana.list
 ```bash
 echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
   | sudo tee /etc/apt/sources.list.d/grafana.list > /dev/null
@@ -468,6 +462,8 @@ Check status service:
 ```bash
 sudo systemctl status grafana-server
 ```
+### Test Grafana
+
 Check listen service:
 ```bash
 sudo netstat -tnlp
