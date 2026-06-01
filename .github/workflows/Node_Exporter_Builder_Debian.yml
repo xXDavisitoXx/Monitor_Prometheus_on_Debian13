@@ -2,8 +2,8 @@ name: Build and Release Node Exporter .deb
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *' # Comprobación diaria para automatización real
+#  schedule:
+#    - cron: '0 0 * * *' # Comprobación diaria para automatización real
 
 permissions:
   contents: write # Necesario para crear Releases y actualizar .node-version
