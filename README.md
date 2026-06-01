@@ -200,6 +200,7 @@ Download and install automatic from APT:
 ```bash
 sudo apt install prometheus-node-exporter
 ```
+<!--
 == Alternative Download .deb Packet ==]
 
 🟢 You can download the last .deb package made by my repository: 
@@ -212,6 +213,7 @@ ready for an automated installation on Debian
 ⚠️ If the libk fail you can check the releases in this repository:
 
 https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases/
+-->
 
 Manual mode:
 Create user:
