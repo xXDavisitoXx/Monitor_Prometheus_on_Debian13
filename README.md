@@ -22,7 +22,7 @@ it eliminates a significant amount of manual setup
 ```bash
 sudo apt install prometheus
 ```
-### [== Alternative Download .deb Packet ==]
+[== Alternative Download .deb Packet ==]
 
 🟢 You can download the last .deb package made by my repository: 
 I have extracted the basic installation instructions and the service created by the official Debian APT package, 
@@ -190,6 +190,16 @@ Try web acces:
 </p>
 
 ## Node-Exporter
+### Install Node_Exporter
+Download and install automatic from APT:
+⚠️ Not recomended, using Prometheus versions provided by apt is not recommended as they are significantly outdated:
+
+```bash
+sudo apt install prometheus-node-exporter
+```
+
+
+Manual mode:
 Create user:
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin node_exporter
