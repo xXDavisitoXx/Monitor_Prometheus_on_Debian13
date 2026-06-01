@@ -27,8 +27,8 @@ jobs:
 
           # --- IDEMPOTENCY CHECK ---
           CURRENT_VERSION="0.0.0"
-          if [ -f .version ]; then
-            CURRENT_VERSION=$(cat .version)
+          if [ -f Versions/.prometheus-version ]; then
+            CURRENT_VERSION=$(cat Versions/.prometheus-version)
           fi
           echo "Currently packaged version in this repo: $CURRENT_VERSION"
 
@@ -187,10 +187,11 @@ jobs:
           DEB_FILE=$(ls prometheus_${LAST_VERSION}_amd64.deb)
 
           # --- SAVE CONFIGURATION STATE TO REPOSITORY ---
-          echo "$LAST_VERSION" > .version
+          mkdir -p Versions
+          echo "$LAST_VERSION" > Versions/.prometheus-version
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .version
+          git add Versions/.prometheus-version
           git commit -m "Bump version to $LAST_VERSION [skip ci]"
           git push origin main
 
