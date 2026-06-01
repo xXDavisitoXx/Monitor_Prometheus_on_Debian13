@@ -1,0 +1,196 @@
+name: Node Exporter Builder Debian
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # Comprobación diaria para automatización real
+
+permissions:
+  contents: write # Necesario para crear Releases y actualizar .version-node
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Clonado rápido, suficiente para modificar el archivo
+
+      - name: Comprobar versiones (Local vs Upstream)
+        id: version_check
+        run: |
+          # Leer versión local o usar 0.0.0 si el archivo no existe aún
+          LOCAL_VERSION=$(cat .version-node 2>/dev/null || echo "0.0.0")
+          
+          # Obtener última versión oficial de Node Exporter
+          UPSTREAM_VERSION=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep "tag_name" | cut -d '"' -f 4 | sed 's/v//')
+          
+          echo "Versión local guardada: $LOCAL_VERSION"
+          echo "Versión upstream oficial: $UPSTREAM_VERSION"
+          
+          if [ "$LOCAL_VERSION" = "$UPSTREAM_VERSION" ]; then
+            echo "El paquete ya está actualizado. Saltando compilación."
+            echo "SHOULD_BUILD=false" >> $GITHUB_ENV
+          else
+            echo "Nueva versión detectada. Iniciando flujo."
+            echo "SHOULD_BUILD=true" >> $GITHUB_ENV
+            echo "VERSION=$UPSTREAM_VERSION" >> $GITHUB_ENV
+          fi
+
+      - name: Descargar y extraer binario oficial
+        if: env.SHOULD_BUILD == 'true'
+        run: |
+          wget "https://github.com/prometheus/node_exporter/releases/download/v${{ env.VERSION }}/node_exporter-${{ env.VERSION }}.linux-amd64.tar.gz"
+          tar xvf "node_exporter-${{ env.VERSION }}.linux-amd64.tar.gz"
+
+      - name: Preparar estructura del paquete Debian (Fiel a APT)
+        if: env.SHOULD_BUILD == 'true'
+        run: |
+          mkdir -p pkg/DEBIAN
+          mkdir -p pkg/usr/bin
+          mkdir -p pkg/etc/default
+          mkdir -p pkg/etc/logrotate.d
+          mkdir -p pkg/lib/systemd/system
+          mkdir -p pkg/var/lib/prometheus/node-exporter
+          mkdir -p pkg/var/log/prometheus
+
+          # Copiar y renombrar el binario al estándar Debian
+          cp node_exporter-${{ env.VERSION }}.linux-amd64/node_exporter pkg/usr/bin/prometheus-node-exporter
+          chmod 755 pkg/usr/bin/prometheus-node-exporter
+
+      - name: Crear archivos de configuración (Service, Default, Logrotate)
+        if: env.SHOULD_BUILD == 'true'
+        run: |
+          # Archivo de variables de entorno por defecto
+          cat << 'EOF' > pkg/etc/default/prometheus-node-exporter
+          # Set the command-line arguments to pass to the server.
+          ARGS=""
+          EOF
+
+          # Systemd Service oficial
+          cat << 'EOF' > pkg/lib/systemd/system/prometheus-node-exporter.service
+          [Unit]
+          Description=Prometheus exporter for machine metrics
+          Documentation=https://github.com/prometheus/node_exporter
+          After=network.target
+
+          [Service]
+          Restart=on-failure
+          User=prometheus
+          EnvironmentFile=/etc/default/prometheus-node-exporter
+          ExecStart=/usr/bin/prometheus-node-exporter $ARGS
+          ExecReload=/bin/kill -HUP $MAINPID
+          TimeoutStopSec=20s
+          SendSIGKILL=no
+
+          [Install]
+          WantedBy=multi-user.target
+          EOF
+
+          # Logrotate config
+          cat << 'EOF' > pkg/etc/logrotate.d/prometheus-node-exporter
+          /var/log/prometheus/prometheus-node-exporter.log {
+              weekly
+              rotate 10
+              copytruncate
+              compress
+              delaycompress
+              notifempty
+              missingok
+          }
+          EOF
+
+      - name: Crear scripts de control de Debian (DEBIAN/)
+        if: env.SHOULD_BUILD == 'true'
+        run: |
+          # Fichero Control
+          cat << EOF > pkg/DEBIAN/control
+          Package: prometheus-node-exporter
+          Version: ${{ env.VERSION }}-1
+          Architecture: amd64
+          Maintainer: xXDavisitoXx
+          Section: net
+          Priority: optional
+          Depends: adduser
+          Description: Prometheus exporter for machine metrics (Automated Upstream Build)
+           Este paquete emula de forma limpia la estructura del paquete oficial de APT,
+           ofreciendo una alternativa más actualizada basada en los binarios oficiales.
+          EOF
+
+          # Script Postinst (Creación segura de usuario y asignación de directorios)
+          cat << 'EOF' > pkg/DEBIAN/postinst
+          #!/bin/sh
+          set -e
+          
+          if [ "$1" = "configure" ]; then
+              if ! getent passwd prometheus > /dev/null; then
+                  adduser --quiet --system --home /var/lib/prometheus --no-create-home \
+                          --group --gecos "Prometheus daemon" prometheus
+              fi
+              
+              # Corregir permisos de directorios sin alterar el resto del sistema
+              chown prometheus:prometheus /var/lib/prometheus /var/lib/prometheus/node-exporter /var/log/prometheus 2>/dev/null || true
+
+              if [ -d /run/systemd/system ]; then
+                  systemctl daemon-reload
+                  systemctl unmask prometheus-node-exporter.service || true
+                  systemctl enable prometheus-node-exporter.service
+                  systemctl restart prometheus-node-exporter.service
+              fi
+          fi
+          exit 0
+          EOF
+
+          # Script Prerm
+          cat << 'EOF' > pkg/DEBIAN/prerm
+          #!/bin/sh
+          set -e
+          if [ -d /run/systemd/system ] && [ "$1" = remove ]; then
+              systemctl stop prometheus-node-exporter.service || true
+              systemctl disable prometheus-node-exporter.service || true
+          fi
+          exit 0
+          EOF
+
+          # Script Postrm
+          cat << 'EOF' > pkg/DEBIAN/postrm
+          #!/bin/sh
+          set -e
+          if [ "$1" = "purge" ] || [ "$1" = "remove" ]; then
+              if [ -d /run/systemd/system ]; then
+                  systemctl daemon-reload
+              fi
+          fi
+          exit 0
+          EOF
+
+          chmod 755 pkg/DEBIAN/postinst pkg/DEBIAN/prerm pkg/DEBIAN/postrm
+
+      - name: Construir el paquete .deb
+        if: env.SHOULD_BUILD == 'true'
+        run: |
+          dpkg-deb --build pkg prometheus-node-exporter_${{ env.VERSION }}-1_amd64.deb
+
+      - name: Publicar GitHub Release con el paquete .deb
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        if: env.SHOULD_BUILD == 'true'
+        with:
+          files: prometheus-node-exporter_*.deb
+          tag_name: v${{ env.VERSION }}
+          name: Node Exporter v${{ env.VERSION }} Debian Package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ESTE PASO SOLO SE EJECUTA SI LA SUBIDA DE LA RELEASE ANTERIOR FUE EXITOSA
+      - name: Actualizar y persistir .version-node en el repositorio
+        if: env.SHOULD_BUILD == 'true' && steps.create_release.outcome == 'success'
+        run: |
+          echo "${{ env.VERSION }}" > .version-node
+          
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add .version-node
+          git commit -m "chore(version): update .version-node to ${{ env.VERSION }} [skip ci]"
+          git push
