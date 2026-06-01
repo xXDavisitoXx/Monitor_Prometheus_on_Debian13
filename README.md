@@ -1,7 +1,6 @@
 # Monitor Prometheus on Debian13
 
 
-
 ---
 <p align="center">
   <img src="Images/Repository/Prometheus_Repository_Cover.png" alt="Prometheus-Repository-Cover" width="100%">
@@ -18,14 +17,12 @@ sudo apt install curl net-tools gnupg whois
  
 From APT:
 ⚠️ Not recommended, Installing via apt is not recommended for up-to-date deployments, 
-as the package updates slowly. That said, if using an older version is acceptable, 
+as the package updates slowly(2.53). That said, if using an older version is acceptable, 
 it eliminates a significant amount of manual setup
 ```bash
 sudo apt install prometheus
 ```
-
-xXDavisitoXx .deb builder:
-## [== Alternative Download .deb Packet ==]
+### [== Alternative Download .deb Packet ==]
 
 🟢 You can download the last .deb package made by my repository: 
 I have extracted the basic installation instructions and the service created by the official Debian APT package, 
