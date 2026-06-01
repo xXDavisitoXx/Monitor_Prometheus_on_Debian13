@@ -204,7 +204,7 @@ I have extracted the basic installation instructions and the service created by 
 and I have integrated them into the binaries to automatically offer the latest version,
 ready for an automated installation on Debian
 
-👉 [Download last prometheus.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases)
+👉 [Download last Node-Exporter.deb](https://github.com/xXDavisitoXx/Monitor_Prometheus_on_Debian13/releases)
 
 ⚠️ If the libk fail you can check the releases in this repository:
 
