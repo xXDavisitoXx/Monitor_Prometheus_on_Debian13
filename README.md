@@ -505,6 +505,8 @@ Home Dashboard:
 <p align="center">
     <img src="Images/Guide/Grafana-Images/Grafana_Home.png" width="100%">
 </p>
+
+#### Add datasource Prometheus to Grafana: 
 Add Prometheus to grafana data source:
 
 Grafana_add_data_source.png
@@ -512,59 +514,64 @@ Grafana_add_data_source.png
 <img src="Images/Guide/Grafana-Images/Grafana_add_data_source.png" width="100%">
 </p>
 
-select pPromtheus source:
+Select Promtheus source:
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_select_prometeus_source.png" width="100%">
 </p>
 
-Configure autentication and IP conection data:
+Configure autentication and IP conection address:
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_Configure_Prometheus_auth.png" width="100%">
 </p>
 
-TEst and veify mensaje :
+Test and verify notification:
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_surccesful_add_prometheus.png" width="100%">
 </p>
 
-ADd dashboard gragana to promtehus:
+### Add Grafana dashboards
 
-We use node exporter full and redis dashboard to prometheus 
+In this tutorial we use 2 dashboards:
 
-https://grafana.com/grafana/dashboards/1860-node-exporter-full/
-ID: 1860
+Prometheus 2.0 Overview
 https://grafana.com/grafana/dashboards/3662-prometheus-2-0-overview/
 ID: 3662
+
+Node Exporter Full
+https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+ID: 1860
 
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_select_menu_import_dashboard.png" width="100%">
 </p>
 
-PRometheus  dashboard:
-Grafana_import_prometheus_dashboard.png
+### Prometheus dashboard:
+
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_add_prometheus_dashboard.png" width="100%">
 </p>
 
 
 Configure name and selec to prometheus server 
-Grafana_add_configure_prometheus_dashboard.png
+
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_add_configured_prometheus_dashboard.png" width="100%">
 </p>
 
-Add node_Eporter dashboard
-Grafana_add_node_exporter_Daashboard.png
+### Node Exporter Full dashboard
+
+
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_add_node_exporter_Daashboard.png" width="100%">
 </p>
 Change name and import:
-Grafana_add_configure_node_exporter.png
+
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_add_configure_node_exporter.png" width="100%">
 </p>
-Check your dashboards run:
-Grafana_dashboardsh_installed.png
+
+
+### Check dashboards
 <p align="center">
 <img src="Images/Guide/Grafana-Images/Grafana_dashboards_installed.png" width="100%">
 </p>
